@@ -3,6 +3,7 @@ import pandas as pd
 from utils.invoice_parser import extract_invoice_data
 from utils.matcher import match_invoice_to_po
 import os
+import io
 
 st.title("📄 Batch Supplier Invoice Matcher for Sage 200")
 
@@ -34,8 +35,6 @@ if invoice_files and po_file:
     st.dataframe(result_df)
 
     if st.button("Download CSV Report"):
-import io
-
 csv_buffer = io.StringIO()
 result_df.to_csv(csv_buffer, index=False)
 st.download_button(
