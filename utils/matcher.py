@@ -10,7 +10,7 @@ def match_invoice_to_po(invoice_data, po_df):
     }
 
     for _, row in po_df.iterrows():
-        if invoice_data["po_number"] == row["PO_Number"]:
+        if invoice_data["po_number"] == row.get("PO_Number") or invoice_data["po_number"] == row.get("PO Number"):
             score = fuzz.partial_ratio(invoice_data["supplier_name"].lower(), row["Supplier_Name"].lower())
             amount_match = abs(invoice_data["total_amount"] - row["Total_Amount"]) < 1.0
 
