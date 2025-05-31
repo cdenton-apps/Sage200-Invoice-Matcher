@@ -1,10 +1,9 @@
-# === app.py ===
 import streamlit as st
 import pandas as pd
 import os
 import io
-from utils.matcher import match_invoice_to_po
 from utils.invoice_parser import extract_invoice_data
+from utils.matcher import match_invoice_to_po
 
 st.title("📄 Supplier Invoice Line-by-Line Matcher for Sage 200")
 
