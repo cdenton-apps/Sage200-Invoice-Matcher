@@ -34,6 +34,13 @@ if invoice_files and po_file:
     st.dataframe(result_df)
 
     if st.button("Download CSV Report"):
-        output_path = "output/match_report.csv"
-        result_df.to_csv(output_path, index=False)
-        st.success(f"✅ Report saved to {output_path}")
+import io
+
+csv_buffer = io.StringIO()
+result_df.to_csv(csv_buffer, index=False)
+st.download_button(
+    label="📥 Download Match Report as CSV",
+    data=csv_buffer.getvalue(),
+    file_name="match_report.csv",
+    mime="text/csv"
+)
