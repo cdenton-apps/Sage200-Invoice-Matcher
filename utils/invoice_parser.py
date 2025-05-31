@@ -1,4 +1,3 @@
-# === utils/invoice_parser.py ===
 import pdfplumber
 import re
 
