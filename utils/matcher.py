@@ -1,29 +1,34 @@
-import pandas as pd
 from fuzzywuzzy import fuzz
 
 def match_invoice_to_po(invoice_data, po_df):
-    results = {
-        "Invoice No": invoice_data["invoice_number"],
-        "PO Match": "Not Found",
-        "Status": "❌",
-        "Issue": "No matching PO"
-    }
+    best_match = None
+    best_issue = "No matching PO"
+    best_status = "No Match"
 
     for _, row in po_df.iterrows():
-        if invoice_data["po_number"] == row.get("PO_Number") or invoice_data["po_number"] == row.get("PO Number"):
-            supplier_csv_key = "Supplier_Name" if "Supplier_Name" in row else "Supplier"
-            score = fuzz.partial_ratio(invoice_data["supplier_name"].lower(), row[supplier_csv_key].lower())
+        if invoice_data["po_number"] == row["PO_Number"]:
+            supplier_score = fuzz.partial_ratio(
+                invoice_data["supplier_name"].lower(),
+                row["Supplier_Name"].lower()
+            )
             amount_match = abs(invoice_data["total_amount"] - row["Total_Amount"]) < 1.0
 
-            if score >= 80 and amount_match:
-                results["PO Match"] = row["PO_Number"]
-                results["Status"] = "✅"
-                results["Issue"] = "-"
-                break
-            else:
-                results["PO Match"] = row["PO_Number"]
-                results["Status"] = "⚠️"
-                results["Issue"] = "Mismatch in supplier or amount"
-                break
+            if supplier_score >= 80 and amount_match:
+                return {
+                    "Invoice No": invoice_data["invoice_number"],
+                    "PO Match": row["PO_Number"],
+                    "Status": "Match",
+                    "Issue": "-",
+                }
 
-    return results
+            else:
+                best_match = row["PO_Number"]
+                best_issue = "Mismatch in supplier or amount"
+                best_status = "Mismatch"
+
+    return {
+        "Invoice No": invoice_data["invoice_number"],
+        "PO Match": best_match if best_match else "Not Found",
+        "Status": best_status,
+        "Issue": best_issue,
+    }
