@@ -34,7 +34,6 @@ if invoice_files and po_file:
     result_df = pd.DataFrame(match_results)
     st.dataframe(result_df)
 
-    if st.button("Download CSV Report"):
 csv_buffer = io.StringIO()
 result_df.to_csv(csv_buffer, index=False)
 st.download_button(
