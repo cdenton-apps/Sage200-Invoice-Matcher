@@ -28,6 +28,7 @@ if invoice_files and po_file:
             f.write(invoice_file.read())
 
         invoice_data = extract_invoice_data(temp_path)
+        st.write(f"Parsed Invoice Data for {invoice_file.name}:", invoice_data)
         result = match_invoice_to_po(invoice_data, po_df)
         result["File Name"] = invoice_file.name
         match_results.append(result)
