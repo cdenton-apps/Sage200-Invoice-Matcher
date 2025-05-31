@@ -10,6 +10,7 @@ po_file = st.file_uploader("Upload Sage PO Export (CSV)", type=["csv"])
 if po_file:
     po_df = pd.read_csv(po_file)
     st.success("✅ PO data loaded successfully!")
+    st.write("PO Columns:", po_df.columns.tolist())
 
 invoice_files = st.file_uploader("Upload Supplier Invoices (PDFs)", type=["pdf"], accept_multiple_files=True)
 
